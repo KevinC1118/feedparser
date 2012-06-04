@@ -3836,7 +3836,7 @@ def replace_doctype(data):
                       for k, v in RE_SAFE_ENTITY_PATTERN.findall(replacement))
     return version, data, safe_entities
 
-def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, referrer=None, handlers=None, request_headers=None, response_headers=None):
+def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, referrer=None, handlers=None, request_headers=None, response_headers=None, keep_document=False):
     '''Parse a feed from a URL, file, stream, or string.
 
     request_headers, if given, is a dict from http header name to value to add
@@ -3985,5 +3985,6 @@ def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, refer
     result['entries'] = feedparser.entries
     result['version'] = result['version'] or feedparser.version
     result['namespaces'] = feedparser.namespacesInUse
-    result['document'] = data
+    if keep_document:
+        result['document'] = data
     return result

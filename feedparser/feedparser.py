@@ -3944,11 +3944,6 @@ def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, refer
     if error is not None:
         result['bozo'] = 1
         result['bozo_exception'] = error
-        if isinstance(error, CharacterEncodingOverride) and keep_document:
-            result['document'] = data
-    else:
-        if keep_document:
-            result['document'] = data
 
     result['version'], data, entities = replace_doctype(data)
 
@@ -3990,4 +3985,8 @@ def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, refer
     result['entries'] = feedparser.entries
     result['version'] = result['version'] or feedparser.version
     result['namespaces'] = feedparser.namespacesInUse
+
+    if result.get('bozo_exception') is None or \
+            isinstance(result.get('bozo_exception'), CharacterEncodingOverride):
+        result['document'] = data
     return result
